@@ -1,0 +1,11 @@
+pandas
+requests
+sqlalchemy
+pyodbc
+
+apache-airflow
+apache-airflow-providers-microsoft-mssql
+
+python-dotenv
+
+pytest

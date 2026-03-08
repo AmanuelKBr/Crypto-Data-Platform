@@ -1,0 +1,62 @@
+services:
+
+  postgres:
+    image: postgres:13
+    container_name: docker-postgres-1
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: airflow
+    volumes:
+      - postgres-db-volume:/var/lib/postgresql/data
+    restart: always
+
+  crypto-sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: crypto-sqlserver
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "StrongPass123!"
+    ports:
+      - "1433:1433"
+    restart: always
+
+  airflow-webserver:
+    build: .
+    container_name: airflow-webserver
+    depends_on:
+      - postgres
+      - crypto-sqlserver
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@docker-postgres-1/airflow
+      AIRFLOW__CORE__LOAD_EXAMPLES: "False"
+    volumes:
+      - ../airflow/dags:/opt/airflow/dags
+      - ../logs:/opt/airflow/logs
+      - ../etl:/opt/airflow/etl
+      - ../.env:/opt/airflow/.env
+    ports:
+      - "8080:8080"
+    command: webserver
+    restart: always
+
+  airflow-scheduler:
+    build: .
+    container_name: airflow-scheduler
+    depends_on:
+      - airflow-webserver
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@docker-postgres-1/airflow
+      AIRFLOW__CORE__LOAD_EXAMPLES: "False"
+    volumes:
+      - ../airflow/dags:/opt/airflow/dags
+      - ../logs:/opt/airflow/logs
+      - ../etl:/opt/airflow/etl
+      - ../.env:/opt/airflow/.env
+    command: scheduler
+    restart: always
+
+volumes:
+  postgres-db-volume:

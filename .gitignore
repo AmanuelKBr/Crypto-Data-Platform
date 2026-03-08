@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+venv/
+
+# Environment variables
+.env
+
+# Logs
+logs/
+
+# Airflow
+airflow/logs
+airflow/airflow.db
+
+# Docker
+*.pid
+
+# VS Code
+.vscode/
+
+# Power BI
+*.pbix
+
+# OS
+.DS_Store
+Thumbs.db
