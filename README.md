@@ -152,6 +152,7 @@ The Power BI dashboard provides:
 * Coin market metrics table
 * Market trend visualization
 * Snapshot timestamp slicer for historical analysis
+<img width="1622" height="1025" alt="image" src="https://github.com/user-attachments/assets/0bf67394-0405-4795-be87-b37a4b775d43" />
 
 ---
 
